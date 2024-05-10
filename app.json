@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "app-v2",
-    "slug": "app-v2",
+    "slug": "distribuidoras-appv2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -31,6 +31,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "dc3763d5-743e-4bcb-8803-ea625a86692c"
+      }
+    },
+    "owner": "mbisurgi88"
   }
 }

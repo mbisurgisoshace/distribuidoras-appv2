@@ -39,12 +39,13 @@ export default function PedidosList() {
   const renderItem = ({ item }) => {
     return (
       <PedidoCard
-        sincronizado={item.sincronizado}
-        codigoCliente={item.codigoCliente}
-        condicionVenta={item.condicionVenta}
-        estadoPedido={item.estadoPedido}
+        id={item.id}
         direccion={item.direccion}
         razonSocial={item.razonSocial}
+        sincronizado={item.sincronizado}
+        estadoPedido={item.estadoPedido}
+        codigoCliente={item.codigoCliente}
+        condicionVenta={item.condicionVenta}
       />
     );
   };

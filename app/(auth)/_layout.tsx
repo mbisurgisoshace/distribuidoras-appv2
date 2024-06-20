@@ -30,7 +30,7 @@ const TabsPage = () => {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="pedidos"
         options={{
           headerTitle: "Pedidos",
           tabBarIcon: ({ color, size }) => (

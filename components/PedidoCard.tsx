@@ -1,11 +1,13 @@
+import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Badge, BadgeText } from "@gluestack-ui/themed";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 import Card from "./ui/Card";
 import { EstadoPedido } from "@/types/Pedido";
 
 interface PedidoCardProps {
+  id: number;
   direccion: string;
   razonSocial: string;
   sincronizado: boolean;
@@ -15,6 +17,7 @@ interface PedidoCardProps {
 }
 
 export default function PedidoCard({
+  id,
   direccion,
   razonSocial,
   estadoPedido,
@@ -24,7 +27,11 @@ export default function PedidoCard({
 }: PedidoCardProps) {
   return (
     <Card>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          router.navigate(`/pedidos/${id}`);
+        }}
+      >
         <View style={styles.container}>
           <View
             style={{

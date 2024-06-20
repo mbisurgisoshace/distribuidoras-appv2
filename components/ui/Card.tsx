@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   card: {
     padding: 16,
     width: "100%",
-    elevation: 14,
+    //elevation: 14,
     shadowOffset: {
       width: 0,
       height: 4,

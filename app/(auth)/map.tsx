@@ -1,17 +1,23 @@
 import React from "react";
-import { View, Text } from "react-native";
+import MapView from "react-native-maps";
 import { useUser } from "@clerk/clerk-expo";
+import { View, StyleSheet } from "react-native";
 
 const Map = () => {
   const { user } = useUser();
 
-  console.log("user", user?.publicMetadata);
-
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
+      <MapView style={styles.map} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  map: {
+    width: "100%",
+    height: "100%",
+  },
+});
 
 export default Map;

@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 import { useSignIn } from "@clerk/clerk-expo";
 import { StyleSheet, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import Page from "@/components/Page";
 
@@ -44,6 +45,7 @@ export default function LoginPage() {
   return (
     <Page>
       <View style={styles.loginForm}>
+        {/* <LinearGradient colors={["#6c47ff", "white"]} style={styles.background} /> */}
         <VStack space="md" style={styles.formContainer}>
           <FormControl size="md" isDisabled={loading}>
             <FormControlLabel mb="$1">
@@ -55,7 +57,9 @@ export default function LoginPage() {
                 value={email}
                 placeholder="Email"
                 autoCapitalize="none"
+                $focus-borderWidth={1}
                 onChangeText={setEmail}
+                $focus-borderColor="#6c47ff"
                 defaultValue="test@gmail.com"
               />
             </Input>
@@ -66,16 +70,25 @@ export default function LoginPage() {
             </FormControlLabel>
             <Input>
               <InputField
+                size="md"
                 type="password"
                 autoCapitalize="none"
                 placeholder="Password"
+                $focus-borderWidth={1}
                 onChangeText={setPassword}
+                $focus-borderColor="#6c47ff"
               />
             </Input>
           </FormControl>
         </VStack>
 
-        <Button onPress={onSignInPress} disabled={loading} size="sm">
+        <Button
+          size="md"
+          bgColor="#6c47ff"
+          disabled={loading}
+          onPress={onSignInPress}
+          style={{ marginBottom: 48 }}
+        >
           <ButtonText>Ingresar </ButtonText>
         </Button>
       </View>
@@ -84,9 +97,17 @@ export default function LoginPage() {
 }
 
 const styles = StyleSheet.create({
+  background: {
+    top: 0,
+    left: 0,
+    right: 0,
+    height: "100%",
+    position: "absolute",
+  },
   loginForm: {
     flex: 1,
-    width: "80%",
+    width: "100%",
+    paddingHorizontal: 16,
     marginVertical: "auto",
     marginHorizontal: "auto",
     justifyContent: "space-between",

@@ -1,16 +1,20 @@
 import {
+  TransitionPresets,
   createStackNavigator,
   StackNavigationOptions,
-  TransitionPresets,
+  StackNavigationEventMap,
 } from "@react-navigation/stack";
 import { Platform } from "react-native";
 import { withLayoutContext, Stack } from "expo-router";
+import { ParamListBase, StackNavigationState } from "@react-navigation/native";
 
 const { Navigator } = createStackNavigator();
 
 export const JsStack = withLayoutContext<
   StackNavigationOptions,
-  typeof Navigator
+  typeof Navigator,
+  StackNavigationState<ParamListBase>,
+  StackNavigationEventMap
 >(Navigator);
 
 const PedidosPage = () => {

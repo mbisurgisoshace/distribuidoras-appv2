@@ -1,6 +1,6 @@
 import { View } from "react-native";
-import { useUser } from "@clerk/clerk-expo";
 import { useFocusEffect } from "expo-router";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import React, { useCallback, useEffect, useState } from "react";
 
 import SettingItem from "@/components/SettingItem";
@@ -12,6 +12,7 @@ import { Button, ButtonText } from "@gluestack-ui/themed";
 
 const Settings = () => {
   const { user } = useUser();
+  const { signOut } = useAuth();
   const [tablaMotivos, setTablaMotivos] = useState<TablaMotivo>();
   const [tablaProductos, setTablaProductos] = useState<TablaProducto>();
 
@@ -61,7 +62,10 @@ const Settings = () => {
       <Button
         size="md"
         bgColor="#6c47ff"
-        onPress={() => {}}
+        onPress={() => {
+          //TODO: Eliminar pedidos existentes antes de cerrar sesion
+          signOut();
+        }}
         style={{ margin: 10 }}
       >
         <ButtonText>Cerrar Sesion </ButtonText>

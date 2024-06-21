@@ -86,7 +86,7 @@ export default function LoginPage() {
           bgColor="#6c47ff"
           disabled={loading}
           onPress={onSignInPress}
-          style={{ marginBottom: 48 }}
+          style={{ marginBottom: 0 }}
         >
           <ButtonText>Ingresar </ButtonText>
         </Button>

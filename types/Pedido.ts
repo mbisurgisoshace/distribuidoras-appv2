@@ -12,7 +12,7 @@ interface Cliente {
   precios: Precio[];
 }
 
-interface Pedido {
+export interface Pedido {
   id: number;
   cliente: Cliente;
   idCondicionVenta: number;

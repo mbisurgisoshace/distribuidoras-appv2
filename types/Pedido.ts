@@ -20,6 +20,8 @@ interface Pedido {
   idEstado: number;
   estado: EstadoPedido;
   items: PedidoItem[];
+  visito: boolean;
+  vendio: boolean;
   sincronizado: boolean;
 }
 

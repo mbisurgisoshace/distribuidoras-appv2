@@ -42,6 +42,18 @@ const TabsPage = () => {
         redirect={!isSignedIn}
       />
       <Tabs.Screen
+        name="resumen"
+        options={{
+          headerTitle: "Resumen",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="stats-chart-outline" size={size} color={color} />
+          ),
+          tabBarLabel: "Resumen",
+          tabBarActiveTintColor: "#6c47ff",
+        }}
+        redirect={!isSignedIn}
+      />
+      <Tabs.Screen
         name="map"
         options={{
           headerShown: false,
@@ -49,6 +61,18 @@ const TabsPage = () => {
             <Ionicons name="navigate-outline" size={size} color={color} />
           ),
           tabBarLabel: "Mapa",
+          tabBarActiveTintColor: "#6c47ff",
+        }}
+        redirect={!isSignedIn}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          headerTitle: "Configuracion",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="cog-outline" size={size} color={color} />
+          ),
+          tabBarLabel: "Configuracion",
           tabBarActiveTintColor: "#6c47ff",
         }}
         redirect={!isSignedIn}

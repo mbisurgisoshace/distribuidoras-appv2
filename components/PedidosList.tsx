@@ -1,9 +1,9 @@
 import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import { SwipeListView } from "react-native-swipe-list-view";
+import { Pressable, TouchableOpacity, View } from "react-native";
 
 import PedidoCard from "./PedidoCard";
-import { Pressable, TouchableOpacity, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function PedidosList() {
   const [data, setData] = useState([

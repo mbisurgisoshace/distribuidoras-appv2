@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 import { useSignIn } from "@clerk/clerk-expo";
 import { StyleSheet, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 import Page from "@/components/Page";
 

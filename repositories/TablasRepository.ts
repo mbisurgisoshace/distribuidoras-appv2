@@ -63,7 +63,6 @@ export default class TablasRepository {
       }));
     } catch (error) {
       console.log(error);
-    } finally {
       return [];
     }
   }
@@ -72,7 +71,7 @@ export default class TablasRepository {
     try {
       const response = await fetch(`${this.apiUrl}/mobile/productos`);
       const data: ProductoCrm[] = await response.json();
-      console.log(data);
+
       return data.map((producto) => ({
         id: producto.envase_id,
         descripcion: producto.envase_nombre,
@@ -81,7 +80,6 @@ export default class TablasRepository {
       }));
     } catch (error) {
       console.log(error);
-    } finally {
       return [];
     }
   }

@@ -13,13 +13,14 @@ import { Button, ButtonText } from "@gluestack-ui/themed";
 const Settings = () => {
   const { user } = useUser();
   const { signOut } = useAuth();
+  const apiUrl = user?.publicMetadata.apiUrl as string;
   const [tablaMotivos, setTablaMotivos] = useState<TablaMotivo>();
   const [tablaProductos, setTablaProductos] = useState<TablaProducto>();
 
   useFocusEffect(
     useCallback(() => {
       async function getTablas() {
-        const tablasRepository = new TablasRepository();
+        const tablasRepository = new TablasRepository(apiUrl);
         const motivos = await tablasRepository.getMotivos();
         const productos = await tablasRepository.getProductos();
         setTablaMotivos(motivos);
@@ -31,14 +32,14 @@ const Settings = () => {
   );
 
   const actualizarMotivos = async () => {
-    const tablasRepository = new TablasRepository();
+    const tablasRepository = new TablasRepository(apiUrl);
     const motivos = await tablasRepository.getMotivosFromApi();
     const tablaMotivos = await tablasRepository.setMotivos(motivos);
     setTablaMotivos(tablaMotivos);
   };
 
   const actualizarProductos = async () => {
-    const tablasRepository = new TablasRepository();
+    const tablasRepository = new TablasRepository(apiUrl);
     const productos = await tablasRepository.getProductosFromApi();
     const tablaProductos = await tablasRepository.setProductos(productos);
     setTablaProductos(tablaProductos);

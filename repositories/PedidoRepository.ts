@@ -2,6 +2,8 @@ import { Pedido } from "@/types/Pedido";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class PedidoRepository {
+  constructor(private apiUrl: string) {}
+
   async getPedido(id: number): Promise<Pedido> {
     const jsonData = await AsyncStorage.getItem(id.toString());
     return JSON.parse(jsonData!) as Pedido;

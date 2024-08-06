@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { Motivo, Producto } from "@/types/Tablas";
+import { Motivo, MotivoCrm, Producto, ProductoCrm } from "@/types/Tablas";
 
 export type TablaMotivo = {
   motivos: Motivo[];
@@ -15,6 +15,8 @@ export type TablaProducto = {
 
 export default class TablasRepository {
   private tablasKey = "tablas";
+
+  constructor(private apiUrl: string) {}
 
   async setMotivos(motivos: Motivo[]): Promise<TablaMotivo> {
     const tablaMotivo = {
@@ -51,20 +53,36 @@ export default class TablasRepository {
   }
 
   async getMotivosFromApi(): Promise<Motivo[]> {
-    // TODO: Implementar llamada a la API
-    return [
-      { id: 1, descripcion: "Cerrado" },
-      { id: 2, descripcion: "Completo" },
-      { id: 4, descripcion: "Por precio" },
-      { id: 3, descripcion: "No vende mas" },
-    ];
+    try {
+      const response = await fetch(`${this.apiUrl}/mobile/motivos`);
+      const data: MotivoCrm[] = await response.json();
+
+      return data.map((motivo) => ({
+        id: motivo.motivo_id,
+        descripcion: motivo.motivo_nombre,
+      }));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      return [];
+    }
   }
 
   async getProductosFromApi(): Promise<Producto[]> {
-    // TODO: Implementar llamada a la API
-    return [
-      { id: 1, descripcion: "Garrafa 10kg", codigo: "1001", kilos: 10 },
-      { id: 3, descripcion: "Garrafa 15kg", codigo: "1002", kilos: 15 },
-    ];
+    try {
+      const response = await fetch(`${this.apiUrl}/mobile/productos`);
+      const data: ProductoCrm[] = await response.json();
+      console.log(data);
+      return data.map((producto) => ({
+        id: producto.envase_id,
+        descripcion: producto.envase_nombre,
+        codigo: producto.envase_codigo.toString(),
+        kilos: producto.kilos,
+      }));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      return [];
+    }
   }
 }

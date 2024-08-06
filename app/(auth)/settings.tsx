@@ -3,11 +3,11 @@ import { useFocusEffect } from "expo-router";
 import { useAuth, useUser } from "@clerk/clerk-expo";
 import React, { useCallback, useEffect, useState } from "react";
 
-import SettingItem from "@/components/SettingItem";
 import TablasRepository, {
   TablaMotivo,
   TablaProducto,
 } from "@/repositories/TablasRepository";
+import SettingItem from "@/components/SettingItem";
 import { Button, ButtonText } from "@gluestack-ui/themed";
 
 const Settings = () => {

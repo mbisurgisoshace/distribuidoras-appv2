@@ -26,6 +26,8 @@ export default class PedidoRepository {
 
   async getPedidosFromApi(): Promise<Pedido[]> {
     try {
+      // TODO: Logica para solo agregar los pedidos nuevos, y respetar los que ya estan en la aplicacion.
+      // La fuente de verdad de los datos es la app, ante una inconsistencia prevalece la informacion de la app.
       const response = await fetch(
         `${this.apiUrl}/mobile/${this.choferId}/pedidos`
       );

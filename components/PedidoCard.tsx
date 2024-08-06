@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   direccion: {
+    height: 40,
     fontSize: 14,
     color: "gray",
     fontWeight: "500",

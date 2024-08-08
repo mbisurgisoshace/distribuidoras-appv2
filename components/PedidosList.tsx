@@ -46,10 +46,12 @@ export default function PedidosList() {
         id={item.id}
         direccion={direccion}
         razonSocial={razonSocial}
-        sincronizado={item.sincronizado}
+        isPedidoTelefonico={false}
         estadoPedido={item.estado}
         codigoCliente={codigoCliente}
+        sincronizado={item.sincronizado}
         condicionVenta={item.condicionVenta}
+        isReclamado={item.reclamo || !!item.observaciones}
       />
     );
   };

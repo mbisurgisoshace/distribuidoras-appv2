@@ -1,7 +1,15 @@
 import { View, StyleSheet } from "react-native";
 
-export default function Card({ children }: { children: React.ReactNode }) {
-  return <View style={styles.card}>{children}</View>;
+interface CardProps {
+  backgroundColor?: string;
+  children: React.ReactNode;
+}
+
+export default function Card({
+  children,
+  backgroundColor = "white",
+}: CardProps) {
+  return <View style={{ ...styles.card, backgroundColor }}>{children}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -17,6 +25,5 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     shadowOpacity: 0.3,
     shadowColor: "black",
-    backgroundColor: "white",
   },
 });

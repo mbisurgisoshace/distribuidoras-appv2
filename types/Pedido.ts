@@ -6,6 +6,7 @@ interface Precio {
 }
 interface Cliente {
   id: number;
+  telefono: string;
   codigoCliente: string;
   razonSocial: string;
   direccion: string;
@@ -22,6 +23,9 @@ export interface Pedido {
   items: PedidoItem[];
   visito: boolean;
   vendio: boolean;
+  reclamo: boolean;
+  orden: number;
+  observaciones?: string;
   sincronizado: boolean;
 }
 

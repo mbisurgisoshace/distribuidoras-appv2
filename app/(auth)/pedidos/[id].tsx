@@ -196,9 +196,10 @@ const Pedido = () => {
           >
             <Button
               size="lg"
-              bgColor="#27ae60"
               onPress={() => {}}
               style={{ flex: 1 }}
+              disabled={pedido.items.length === 0}
+              bgColor={pedido.items.length === 0 ? "grey" : "#27ae60"}
             >
               <ButtonText>Entregar</ButtonText>
             </Button>

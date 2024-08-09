@@ -32,6 +32,7 @@ const Pedido = () => {
   const [showItemModal, setShowItemModal] = useState(false);
   const [pedido, setPedido] = useState<IPedido | null>(null);
   const [productos, setProductos] = useState<Producto[]>([]);
+  const [editableItem, setEditableItem] = useState<PedidoItem | null>(null);
 
   useEffect(() => {
     const getPedido = async () => {
@@ -55,6 +56,29 @@ const Pedido = () => {
   const onAddItem = (idProducto: number, cantidad: number) => {
     const precios = pedido!.cliente.precios;
     const precioProducto = precios.find((p) => p.idProducto === idProducto);
+
+    if (editableItem) {
+      setPedido((prevPedido) => {
+        if (!prevPedido) return null;
+        return {
+          ...prevPedido,
+          items: prevPedido.items.map((item) => {
+            if (item.id === editableItem.id) {
+              return {
+                ...item,
+                idProducto,
+                cantidad,
+                precio: precioProducto?.precio || 0,
+              };
+            }
+            return item;
+          }),
+        };
+      });
+
+      return;
+    }
+
     const itemPedido: PedidoItem = {
       id: uuid.v4().toString(),
       idProducto,
@@ -71,6 +95,13 @@ const Pedido = () => {
     });
   };
 
+  const onSelectItemToEdit = (idItem: string) => {
+    const item = pedido?.items.find((item) => item.id === idItem);
+    if (!item) return;
+
+    setEditableItem(item);
+  };
+
   const onDeleteItem = (idItem: string) => {
     setPedido((prevPedido) => {
       if (!prevPedido) return null;
@@ -80,8 +111,6 @@ const Pedido = () => {
       };
     });
   };
-
-  console.log("pedido", pedido);
 
   return (
     <View style={{ flex: 1 }}>
@@ -152,8 +181,8 @@ const Pedido = () => {
             <PedidoItemsList
               items={pedido.items}
               productos={productos}
-              onEditItem={(id) => {}}
               onDeleteItem={onDeleteItem}
+              onEditItem={onSelectItemToEdit}
             />
           )}
 
@@ -184,12 +213,17 @@ const Pedido = () => {
           </View>
         </View>
       )}
-      {showItemModal && (
-        <EditItemModal
-          onClose={() => setShowItemModal(false)}
-          onAddItem={onAddItem}
-        />
-      )}
+      {showItemModal ||
+        (editableItem && (
+          <EditItemModal
+            onAddItem={onAddItem}
+            itemPedido={editableItem}
+            onClose={() => {
+              setEditableItem(null);
+              setShowItemModal(false);
+            }}
+          />
+        ))}
     </View>
   );
 };

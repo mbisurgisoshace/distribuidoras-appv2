@@ -7,21 +7,28 @@ import { Button, ButtonText, ButtonIcon } from "@gluestack-ui/themed";
 import Input from "./ui/Input";
 import { Producto } from "@/types/Tablas";
 import TablasRepository from "@/repositories/TablasRepository";
+import { PedidoItem } from "@/types/Pedido";
 
 interface EditItemModalProps {
   onClose: () => void;
+  itemPedido?: PedidoItem;
   onAddItem: (idProducto: number, cantidad: number) => void;
 }
 
 export default function EditItemModal({
   onClose,
   onAddItem,
+  itemPedido,
 }: EditItemModalProps) {
   const { user } = useUser();
   const apiUrl = user?.publicMetadata.apiUrl as string;
-  const [cantidad, setCantidad] = useState("");
   const [productos, setProductos] = useState<Producto[]>([]);
-  const [selectedProducto, setSelectedProducto] = useState();
+  const [cantidad, setCantidad] = useState(
+    itemPedido?.cantidad.toString() || ""
+  );
+  const [selectedProducto, setSelectedProducto] = useState(
+    itemPedido?.idProducto || null
+  );
 
   useEffect(() => {
     async function getProductos() {
@@ -89,7 +96,7 @@ export default function EditItemModal({
               }}
               bgColor={isAgregarDisabled ? "grey" : "#27ae60"}
             >
-              <ButtonText>Agregar</ButtonText>
+              <ButtonText>{itemPedido ? "Editar" : "Agregar"}</ButtonText>
             </Button>
             <Button
               size="md"

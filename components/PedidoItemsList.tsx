@@ -50,8 +50,17 @@ export default function PedidoItemsList({
           alignItems: "center",
         }}
       >
-        <TouchableOpacity onPress={() => onDeleteItem(item.id)}>
+        <TouchableOpacity
+          onPress={() => onDeleteItem(item.id)}
+          style={{ left: 0, position: "absolute" }}
+        >
           <Ionicons name="trash-outline" size={20} color="#e74c3c" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => onEditItem(item.id)}
+          style={{ right: 0, position: "absolute" }}
+        >
+          <Ionicons name="pencil-outline" size={20} color="#6c47ff" />
         </TouchableOpacity>
       </View>
     );
@@ -60,8 +69,8 @@ export default function PedidoItemsList({
   return (
     <SwipeListView
       data={items}
-      leftOpenValue={50}
-      disableLeftSwipe={true}
+      leftOpenValue={35}
+      rightOpenValue={-35}
       renderItem={renderItem}
       renderHiddenItem={renderHiddenItem}
       contentContainerStyle={{ paddingBottom: 15 }}

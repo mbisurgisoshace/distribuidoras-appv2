@@ -30,8 +30,8 @@ export interface Pedido {
   sincronizado: boolean;
 }
 
-interface PedidoItem {
-  id?: number;
+export interface PedidoItem {
+  id: string;
   idProducto: number;
   cantidad: number;
   precio: number;

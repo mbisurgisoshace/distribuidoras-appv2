@@ -7,18 +7,22 @@ import {
   CircleAlert,
   CircleDollarSign,
 } from "lucide-react-native";
+import uuid from "react-native-uuid";
 import * as Linking from "expo-linking";
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-expo";
-import { Text, View, StyleSheet } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
+import { Text, View, StyleSheet, Platform } from "react-native";
 import { Button, ButtonText, ButtonIcon } from "@gluestack-ui/themed";
 
 import Card from "@/components/ui/Card";
-import { Pedido as IPedido } from "@/types/Pedido";
-import PedidoRepository from "@/repositories/PedidoRepository";
-import EditItemModal from "@/components/EditItemModal";
+import { Producto } from "@/types/Tablas";
+import { Pedido as IPedido, PedidoItem } from "@/types/Pedido";
 import PedidoField from "@/components/PedidoField";
+import EditItemModal from "@/components/EditItemModal";
+import PedidoRepository from "@/repositories/PedidoRepository";
+import TablasRepository from "@/repositories/TablasRepository";
+import PedidoItemsList from "@/components/PedidoItemsList";
 
 const Pedido = () => {
   const { user } = useUser();
@@ -27,6 +31,7 @@ const Pedido = () => {
   const choferId = user?.publicMetadata.choferId as number;
   const [showItemModal, setShowItemModal] = useState(false);
   const [pedido, setPedido] = useState<IPedido | null>(null);
+  const [productos, setProductos] = useState<Producto[]>([]);
 
   useEffect(() => {
     const getPedido = async () => {
@@ -36,6 +41,47 @@ const Pedido = () => {
     };
     getPedido();
   }, []);
+
+  useEffect(() => {
+    async function getProductos() {
+      const tablasRepository = new TablasRepository(apiUrl);
+      const tablaProductos = await tablasRepository.getProductos();
+      setProductos(tablaProductos.productos);
+    }
+
+    getProductos();
+  }, []);
+
+  const onAddItem = (idProducto: number, cantidad: number) => {
+    const precios = pedido!.cliente.precios;
+    const precioProducto = precios.find((p) => p.idProducto === idProducto);
+    const itemPedido: PedidoItem = {
+      id: uuid.v4().toString(),
+      idProducto,
+      cantidad,
+      precio: precioProducto?.precio || 0,
+    };
+
+    setPedido((prevPedido) => {
+      if (!prevPedido) return null;
+      return {
+        ...prevPedido,
+        items: [...prevPedido.items, itemPedido],
+      };
+    });
+  };
+
+  const onDeleteItem = (idItem: string) => {
+    setPedido((prevPedido) => {
+      if (!prevPedido) return null;
+      return {
+        ...prevPedido,
+        items: prevPedido.items.filter((item) => item.id !== idItem),
+      };
+    });
+  };
+
+  console.log("pedido", pedido);
 
   return (
     <View style={{ flex: 1 }}>
@@ -68,9 +114,11 @@ const Pedido = () => {
                 <Phone color={"#6c47ff"} size={16} />
                 <Text
                   style={styles.telefono}
-                  onPress={() => Linking.openURL(`tel:${42959090}`)}
+                  onPress={() =>
+                    Linking.openURL(`tel:${pedido.cliente.telefono}`)
+                  }
                 >
-                  {"42959090"}
+                  {pedido.cliente.telefono}
                 </Text>
               </View>
             </View>
@@ -89,6 +137,7 @@ const Pedido = () => {
               />
             </View>
           </Card>
+
           <Button
             size="md"
             bgColor="#6c47ff"
@@ -98,12 +147,22 @@ const Pedido = () => {
             <ButtonText>Agregar</ButtonText>
             <ButtonIcon as={Plus} style={{ marginLeft: 10 }} />
           </Button>
+
+          {productos.length > 0 && (
+            <PedidoItemsList
+              items={pedido.items}
+              productos={productos}
+              onEditItem={(id) => {}}
+              onDeleteItem={onDeleteItem}
+            />
+          )}
+
           <View
             style={{
               gap: 10,
-              //marginBottom: 30,
               marginTop: "auto",
               flexDirection: "row",
+              marginBottom: Platform.OS === "ios" ? 30 : 0,
             }}
           >
             <Button
@@ -126,7 +185,10 @@ const Pedido = () => {
         </View>
       )}
       {showItemModal && (
-        <EditItemModal onClose={() => setShowItemModal(false)} />
+        <EditItemModal
+          onClose={() => setShowItemModal(false)}
+          onAddItem={onAddItem}
+        />
       )}
     </View>
   );

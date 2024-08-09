@@ -10,9 +10,13 @@ import TablasRepository from "@/repositories/TablasRepository";
 
 interface EditItemModalProps {
   onClose: () => void;
+  onAddItem: (idProducto: number, cantidad: number) => void;
 }
 
-export default function EditItemModal({ onClose }: EditItemModalProps) {
+export default function EditItemModal({
+  onClose,
+  onAddItem,
+}: EditItemModalProps) {
   const { user } = useUser();
   const apiUrl = user?.publicMetadata.apiUrl as string;
   const [cantidad, setCantidad] = useState("");
@@ -28,6 +32,8 @@ export default function EditItemModal({ onClose }: EditItemModalProps) {
 
     getProductos();
   }, []);
+
+  const isAgregarDisabled = !selectedProducto || !cantidad;
 
   return (
     <View style={styles.backdrop}>
@@ -73,7 +79,16 @@ export default function EditItemModal({ onClose }: EditItemModalProps) {
             keyboardType="numbers-and-punctuation"
           />
           <View style={styles.modalFormFooter}>
-            <Button size="md" bgColor="#27ae60" style={{ flex: 1 }}>
+            <Button
+              size="md"
+              style={{ flex: 1 }}
+              disabled={isAgregarDisabled}
+              onPress={() => {
+                onAddItem(selectedProducto!, parseInt(cantidad));
+                onClose();
+              }}
+              bgColor={isAgregarDisabled ? "grey" : "#27ae60"}
+            >
               <ButtonText>Agregar</ButtonText>
             </Button>
             <Button
@@ -120,7 +135,7 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     display: "flex",
-    marginBottom: 30,
+    marginBottom: 15,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -133,7 +148,7 @@ const styles = StyleSheet.create({
   modalBody: {},
   modalFormFooter: {
     gap: 10,
-    marginTop: 30,
+    marginTop: 15,
     flexDirection: "row",
   },
 });

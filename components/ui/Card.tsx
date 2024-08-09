@@ -3,13 +3,25 @@ import { View, StyleSheet } from "react-native";
 interface CardProps {
   backgroundColor?: string;
   children: React.ReactNode;
+  size?: "small" | "medium";
 }
 
 export default function Card({
   children,
+  size = "medium",
   backgroundColor = "white",
 }: CardProps) {
-  return <View style={{ ...styles.card, backgroundColor }}>{children}</View>;
+  return (
+    <View
+      style={{
+        ...styles.card,
+        backgroundColor,
+        padding: size === "medium" ? 16 : 8,
+      }}
+    >
+      {children}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

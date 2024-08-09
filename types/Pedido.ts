@@ -27,7 +27,7 @@ export interface Pedido {
   reclamo: boolean;
   orden: number;
   observaciones?: string;
-  sincronizado: boolean;
+  sincronizado?: boolean;
 }
 
 export interface PedidoItem {

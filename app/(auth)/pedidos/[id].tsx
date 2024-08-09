@@ -11,7 +11,7 @@ import uuid from "react-native-uuid";
 import * as Linking from "expo-linking";
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-expo";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useNavigation } from "expo-router";
 import { Text, View, StyleSheet, Platform } from "react-native";
 import { Button, ButtonText, ButtonIcon } from "@gluestack-ui/themed";
 
@@ -23,15 +23,18 @@ import EditItemModal from "@/components/EditItemModal";
 import PedidoRepository from "@/repositories/PedidoRepository";
 import TablasRepository from "@/repositories/TablasRepository";
 import PedidoItemsList from "@/components/PedidoItemsList";
+import NoEntregadoModal from "@/components/NoEntregadoModal";
 
 const Pedido = () => {
   const { user } = useUser();
+  const navigation = useNavigation();
   const { id } = useLocalSearchParams();
   const apiUrl = user?.publicMetadata.apiUrl as string;
   const choferId = user?.publicMetadata.choferId as number;
   const [showItemModal, setShowItemModal] = useState(false);
   const [pedido, setPedido] = useState<IPedido | null>(null);
   const [productos, setProductos] = useState<Producto[]>([]);
+  const [showNoEntregadoModal, setShowNoEntregadoModal] = useState(false);
   const [editableItem, setEditableItem] = useState<PedidoItem | null>(null);
 
   useEffect(() => {
@@ -110,6 +113,43 @@ const Pedido = () => {
         items: prevPedido.items.filter((item) => item.id !== idItem),
       };
     });
+  };
+
+  const onEntregarPedido = async () => {
+    if (!pedido) return;
+
+    pedido.idEstado = 3;
+    pedido.vendio = true;
+    pedido.visito = true;
+    pedido.sincronizado = false;
+    pedido.estado = "Entregado";
+
+    const pedidoRepository = new PedidoRepository(apiUrl, choferId);
+    await pedidoRepository.updatePedido(pedido);
+
+    navigation.goBack();
+  };
+
+  const onNoEntregarPedido = async () => {
+    if (!pedido) return;
+
+    setShowNoEntregadoModal(true);
+  };
+
+  const onConfirmarNoEntregado = async (idMotivo: number, visito: boolean) => {
+    if (!pedido) return;
+
+    pedido.idEstado = 4;
+    pedido.vendio = false;
+    pedido.visito = visito;
+    pedido.idMotivo = idMotivo;
+    pedido.sincronizado = false;
+    pedido.estado = "No Entregado";
+
+    const pedidoRepository = new PedidoRepository(apiUrl, choferId);
+    await pedidoRepository.updatePedido(pedido);
+
+    navigation.goBack();
   };
 
   return (
@@ -196,8 +236,8 @@ const Pedido = () => {
           >
             <Button
               size="lg"
-              onPress={() => {}}
               style={{ flex: 1 }}
+              onPress={onEntregarPedido}
               disabled={pedido.items.length === 0}
               bgColor={pedido.items.length === 0 ? "grey" : "#27ae60"}
             >
@@ -206,8 +246,8 @@ const Pedido = () => {
             <Button
               size="lg"
               bgColor="#e74c3c"
-              onPress={() => {}}
               style={{ flex: 1 }}
+              onPress={onNoEntregarPedido}
             >
               <ButtonText>No Entregado</ButtonText>
             </Button>
@@ -225,6 +265,12 @@ const Pedido = () => {
             }}
           />
         ))}
+      {showNoEntregadoModal && (
+        <NoEntregadoModal
+          onClose={() => setShowNoEntregadoModal(false)}
+          onConfirmarNoEntregado={onConfirmarNoEntregado}
+        />
+      )}
     </View>
   );
 };

@@ -48,11 +48,13 @@ export default function PedidoCard({
             <Text
               style={[styles.codigo, isReclamado ? styles.reclamado : {}]}
             >{`${codigoCliente}`}</Text>
-            <Ionicons
-              name="cloud-upload-outline"
-              size={18}
-              color={sincronizado ? "#2ecc71" : "#e74c3c"}
-            />
+            {sincronizado === true || sincronizado === false ? (
+              <Ionicons
+                name="cloud-upload-outline"
+                size={18}
+                color={sincronizado ? "#2ecc71" : "#e74c3c"}
+              />
+            ) : null}
           </View>
           <Text style={[styles.razonSocial]}>{`${razonSocial}`}</Text>
           <View>

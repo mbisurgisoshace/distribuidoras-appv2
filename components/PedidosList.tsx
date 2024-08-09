@@ -1,5 +1,6 @@
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "expo-router";
 import { useState, useCallback, useEffect } from "react";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { TouchableOpacity, View, RefreshControl } from "react-native";
@@ -15,16 +16,18 @@ export default function PedidosList() {
   const [refreshing, setRefreshing] = useState(false);
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
 
-  useEffect(() => {
-    async function getPedidos() {
-      const pedidosRepository = new PedidoRepository(apiUrl, choferId);
-      const pedidos = await pedidosRepository.getPedidos();
+  useFocusEffect(
+    useCallback(() => {
+      async function getPedidos() {
+        const pedidosRepository = new PedidoRepository(apiUrl, choferId);
+        const pedidos = await pedidosRepository.getPedidos();
 
-      setPedidos(pedidos);
-    }
+        setPedidos(pedidos);
+      }
 
-    getPedidos();
-  }, []);
+      getPedidos();
+    }, [])
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

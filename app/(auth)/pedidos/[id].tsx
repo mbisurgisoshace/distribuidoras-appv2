@@ -18,6 +18,7 @@ import Card from "@/components/ui/Card";
 import { Pedido as IPedido } from "@/types/Pedido";
 import PedidoRepository from "@/repositories/PedidoRepository";
 import EditItemModal from "@/components/EditItemModal";
+import PedidoField from "@/components/PedidoField";
 
 const Pedido = () => {
   const { user } = useUser();
@@ -51,24 +52,18 @@ const Pedido = () => {
         <View style={{ flex: 1, gap: 10, padding: 10 }}>
           <Card backgroundColor="rgba(108, 71, 255, 0.1)">
             <View style={{ gap: 10 }}>
-              <View style={styles.wrapperCampo}>
-                <Hash color={"#6c47ff"} size={16} />
-                <Text style={styles.campoValue}>
-                  {pedido.cliente.codigoCliente}
-                </Text>
-              </View>
-              <View style={styles.wrapperCampo}>
-                <User color={"#6c47ff"} size={16} />
-                <Text
-                  style={styles.campoValue}
-                >{`${pedido.cliente.razonSocial}`}</Text>
-              </View>
-              <View style={styles.wrapperCampo}>
-                <Home color={"#6c47ff"} size={16} />
-                <Text style={styles.campoValue}>
-                  {pedido.cliente.direccion}
-                </Text>
-              </View>
+              <PedidoField
+                value={pedido.cliente.codigoCliente}
+                icon={<Hash color={"#6c47ff"} size={16} />}
+              />
+              <PedidoField
+                value={pedido.cliente.razonSocial}
+                icon={<User color={"#6c47ff"} size={16} />}
+              />
+              <PedidoField
+                value={pedido.cliente.direccion}
+                icon={<Home color={"#6c47ff"} size={16} />}
+              />
               <View style={styles.wrapperCampo}>
                 <Phone color={"#6c47ff"} size={16} />
                 <Text
@@ -80,18 +75,18 @@ const Pedido = () => {
               </View>
             </View>
           </Card>
+
           <Card>
             <View style={{ gap: 10 }}>
-              <View style={styles.wrapperCampo}>
-                <CircleDollarSign color={"#6c47ff"} size={16} />
-                <Text style={styles.campoValue}>{pedido.condicionVenta}</Text>
-              </View>
-              <View style={styles.wrapperCampo}>
-                <CircleAlert color={"#e74c3c"} size={16} />
-                <Text style={{ ...styles.campoValue, color: "#e74c3c" }}>
-                  {"Observacion del pedido bla bla bla asdasdasdasdasdasdas"}
-                </Text>
-              </View>
+              <PedidoField
+                value={pedido.condicionVenta}
+                icon={<CircleDollarSign color={"#6c47ff"} size={16} />}
+              />
+              <PedidoField
+                textColor="#e74c3c"
+                value={pedido.observaciones || ""}
+                icon={<CircleAlert color={"#e74c3c"} size={16} />}
+              />
             </View>
           </Card>
           <Button

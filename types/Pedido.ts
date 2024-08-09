@@ -19,6 +19,7 @@ export interface Pedido {
   idCondicionVenta: number;
   condicionVenta: string;
   idEstado: number;
+  idMotivo: number;
   estado: EstadoPedido;
   items: PedidoItem[];
   visito: boolean;

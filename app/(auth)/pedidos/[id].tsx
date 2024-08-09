@@ -42,7 +42,9 @@ const Pedido = () => {
         options={{
           title: `Pedido ${id}`,
           headerRight: () =>
-            pedido?.reclamo ? <CircleAlert color={"#e74c3c"} /> : null,
+            pedido?.reclamo || !!pedido?.observaciones ? (
+              <CircleAlert color={"#e74c3c"} />
+            ) : null,
         }}
       />
       {pedido && (

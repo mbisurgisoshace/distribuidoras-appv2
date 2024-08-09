@@ -54,9 +54,7 @@ export default function PedidoCard({
               color={sincronizado ? "#2ecc71" : "#e74c3c"}
             />
           </View>
-          <Text
-            style={[styles.razonSocial, isReclamado ? styles.reclamado : {}]}
-          >{`${razonSocial}`}</Text>
+          <Text style={[styles.razonSocial]}>{`${razonSocial}`}</Text>
           <View>
             <Text style={styles.direccion}>{direccion}</Text>
           </View>

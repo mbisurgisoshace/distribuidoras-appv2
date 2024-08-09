@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
-import { Pressable } from "react-native";
 import { useAuth } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
+import { Pressable, Platform } from "react-native";
 
 export const LogoutButton = () => {
   const { signOut } = useAuth();
@@ -33,6 +33,7 @@ const TabsPage = () => {
         name="pedidos"
         options={{
           headerTitle: "Pedidos",
+          headerShown: Platform.OS === "ios",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart-outline" size={size} color={color} />
           ),

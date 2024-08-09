@@ -1,14 +1,21 @@
 import React from "react";
-import { View, Text } from "react-native";
 import { useUser } from "@clerk/clerk-expo";
-import Card from "@/components/ui/Card";
-import PedidoCard from "@/components/PedidoCard";
+import { Platform, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 import PedidosList from "@/components/PedidosList";
 
 const Home = () => {
   const { user } = useUser();
 
   console.log("user", user?.publicMetadata);
+
+  if (Platform.OS === "android")
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <PedidosList />
+      </SafeAreaView>
+    );
 
   return (
     <View style={{ flex: 1 }}>

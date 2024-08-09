@@ -18,25 +18,6 @@ export const JsStack = withLayoutContext<
 >(Navigator);
 
 const PedidosPage = () => {
-  if (Platform.OS === "android")
-    return (
-      <JsStack>
-        <JsStack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <JsStack.Screen
-          name="[id]"
-          options={{
-            ...TransitionPresets.ModalPresentationIOS,
-            presentation: "modal",
-          }}
-        />
-      </JsStack>
-    );
-
   return (
     <Stack>
       <Stack.Screen

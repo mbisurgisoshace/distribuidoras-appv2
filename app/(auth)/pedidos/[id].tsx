@@ -101,7 +101,7 @@ const Pedido = () => {
           <View
             style={{
               gap: 10,
-              marginBottom: 30,
+              //marginBottom: 30,
               marginTop: "auto",
               flexDirection: "row",
             }}

@@ -1,7 +1,8 @@
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "expo-router";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
+import Toast from "react-native-toast-message";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { TouchableOpacity, View, RefreshControl } from "react-native";
 
@@ -13,7 +14,6 @@ export default function PedidosList() {
   const { user } = useUser();
   const apiUrl = user?.publicMetadata.apiUrl as string;
   const choferId = user?.publicMetadata.choferId as number;
-  const [errors, setErrors] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
 
@@ -46,7 +46,6 @@ export default function PedidosList() {
     };
 
     const uploadPedidosToApi = async () => {
-      //const pedidosRepository = new PedidoRepository(apiUrl, choferId);
       try {
         await pedidosRepository.uploadPedidosToApi();
         const pedidos = await pedidosRepository.getPedidos();
@@ -59,8 +58,27 @@ export default function PedidosList() {
     const syncData = async () => {
       await getPedidosFromApi();
       await uploadPedidosToApi();
-      setErrors(errors);
       setRefreshing(false);
+      if (errors.length > 0) {
+        if (errors.length === 2) {
+          Toast.show({
+            type: "error",
+            text1: "Hubo un error.",
+            text2: "No se pudo enviar ni recibir pedidos",
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: "Hubo un error.",
+            text2: errors[0],
+          });
+        }
+      } else {
+        Toast.show({
+          type: "success",
+          text1: "Pedidos enviados y recibidos correctamente",
+        });
+      }
     };
 
     syncData();

@@ -57,7 +57,7 @@ export default class PedidoRepository {
       return pedidos;
     } catch (err) {
       console.log(err);
-      throw new Error("Error al obtener pedidos.");
+      throw new Error("Error al recibir pedidos.");
     }
   }
 

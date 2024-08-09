@@ -33,8 +33,9 @@ export default function PedidosList() {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     const errors: string[] = [];
+    const pedidosRepository = new PedidoRepository(apiUrl, choferId);
+
     const getPedidosFromApi = async () => {
-      const pedidosRepository = new PedidoRepository(apiUrl, choferId);
       try {
         const pedidos = await pedidosRepository.getPedidosFromApi();
         await pedidosRepository.setPedidos(pedidos);
@@ -45,7 +46,7 @@ export default function PedidosList() {
     };
 
     const uploadPedidosToApi = async () => {
-      const pedidosRepository = new PedidoRepository(apiUrl, choferId);
+      //const pedidosRepository = new PedidoRepository(apiUrl, choferId);
       try {
         await pedidosRepository.uploadPedidosToApi();
         const pedidos = await pedidosRepository.getPedidos();

@@ -9,11 +9,13 @@ import TablasRepository, {
 } from "@/repositories/TablasRepository";
 import SettingItem from "@/components/SettingItem";
 import { Button, ButtonText } from "@gluestack-ui/themed";
+import PedidoRepository from "@/repositories/PedidoRepository";
 
 const Settings = () => {
   const { user } = useUser();
   const { signOut } = useAuth();
   const apiUrl = user?.publicMetadata.apiUrl as string;
+  const choferId = user?.publicMetadata.choferId as number;
   const [tablaMotivos, setTablaMotivos] = useState<TablaMotivo>();
   const [tablaProductos, setTablaProductos] = useState<TablaProducto>();
 
@@ -45,6 +47,12 @@ const Settings = () => {
     setTablaProductos(tablaProductos);
   };
 
+  const onSignOut = async () => {
+    const pedidosRepository = new PedidoRepository(apiUrl, choferId);
+    await pedidosRepository.deleteAllPedidos();
+    signOut();
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: "space-between" }}>
       <View>
@@ -63,10 +71,7 @@ const Settings = () => {
       <Button
         size="md"
         bgColor="#6c47ff"
-        onPress={() => {
-          //TODO: Eliminar pedidos existentes antes de cerrar sesion
-          signOut();
-        }}
+        onPress={onSignOut}
         style={{ margin: 10 }}
       >
         <ButtonText>Cerrar Sesion </ButtonText>

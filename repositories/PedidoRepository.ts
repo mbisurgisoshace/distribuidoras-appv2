@@ -32,6 +32,13 @@ export default class PedidoRepository {
     await AsyncStorage.removeItem(id.toString());
   }
 
+  async deleteAllPedidos(): Promise<void> {
+    const keys = (await AsyncStorage.getAllKeys()).filter(
+      (key) => !key.includes("tablas")
+    );
+    await AsyncStorage.multiRemove(keys);
+  }
+
   async getPedidosFromApi(): Promise<Pedido[]> {
     try {
       const response = await fetch(

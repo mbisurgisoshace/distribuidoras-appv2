@@ -7,6 +7,7 @@ import {
   CircleAlert,
   CircleDollarSign,
 } from "lucide-react-native";
+import numeral from "numeral";
 import uuid from "react-native-uuid";
 import * as Linking from "expo-linking";
 import { useState, useEffect } from "react";
@@ -154,11 +155,19 @@ const Pedido = () => {
     navigation.goBack();
   };
 
+  const getTotalPedido = () => {
+    if (!pedido) return 0;
+
+    return pedido.items.reduce((acc, item) => {
+      return acc + item.cantidad * item.precio;
+    }, 0);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <Stack.Screen
         options={{
-          title: `Pedido ${id}`,
+          title: `Total: ${numeral(getTotalPedido()).format("$0.0,")}`,
           headerRight: () =>
             pedido?.reclamo || !!pedido?.observaciones ? (
               <CircleAlert color={"#e74c3c"} />

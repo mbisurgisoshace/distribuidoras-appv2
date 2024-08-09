@@ -103,11 +103,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     paddingHorizontal: 30,
     justifyContent: "center",
-    backgroundColor: "rgba(24,23,25, 0.5)",
+    backgroundColor: "rgba(24,23,25, 0.80)",
   },
   modalContainer: {
     //flex: 1,
-    padding: 10,
+    padding: 20,
     borderRadius: 5,
     shadowOffset: {
       width: 0,

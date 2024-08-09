@@ -35,7 +35,9 @@ const Pedido = () => {
   const [pedido, setPedido] = useState<IPedido | null>(null);
   const [productos, setProductos] = useState<Producto[]>([]);
   const [showNoEntregadoModal, setShowNoEntregadoModal] = useState(false);
-  const [editableItem, setEditableItem] = useState<PedidoItem | null>(null);
+  const [editableItem, setEditableItem] = useState<PedidoItem | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     const getPedido = async () => {
@@ -254,17 +256,16 @@ const Pedido = () => {
           </View>
         </View>
       )}
-      {showItemModal ||
-        (editableItem && (
-          <EditItemModal
-            onAddItem={onAddItem}
-            itemPedido={editableItem}
-            onClose={() => {
-              setEditableItem(null);
-              setShowItemModal(false);
-            }}
-          />
-        ))}
+      {(showItemModal || editableItem) && (
+        <EditItemModal
+          onAddItem={onAddItem}
+          itemPedido={editableItem}
+          onClose={() => {
+            setEditableItem(null);
+            setShowItemModal(false);
+          }}
+        />
+      )}
       {showNoEntregadoModal && (
         <NoEntregadoModal
           onClose={() => setShowNoEntregadoModal(false)}

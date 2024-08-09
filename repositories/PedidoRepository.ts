@@ -34,17 +34,59 @@ export default class PedidoRepository {
 
   async getPedidosFromApi(): Promise<Pedido[]> {
     try {
-      // TODO: Logica para solo agregar los pedidos nuevos, y respetar los que ya estan en la aplicacion.
-      // La fuente de verdad de los datos es la app, ante una inconsistencia prevalece la informacion de la app.
       const response = await fetch(
         `${this.apiUrl}/mobile/${this.choferId}/pedidos`
       );
-      const data = await response.json();
 
-      return data;
+      const data = await response.json();
+      const pedidos = await this.getPedidos();
+
+      data.forEach((pedido: Pedido) => {
+        if (!pedidos.map((pedido) => pedido.id).includes(pedido.id)) {
+          pedidos.push(pedido);
+        }
+      });
+
+      return pedidos;
     } catch (err) {
       console.log(err);
-      return [];
+      throw new Error("Error al obtener pedidos.");
+    }
+  }
+
+  async uploadPedidosToApi(): Promise<void> {
+    try {
+      const pedidos = await this.getPedidos();
+      const pedidosParaSincronizar = pedidos.filter(
+        (pedido) => pedido.sincronizado === false
+      );
+
+      const response = await fetch(
+        `${this.apiUrl}/mobile/${this.choferId}/pedidos`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(pedidosParaSincronizar),
+        }
+      );
+
+      if (response.ok) {
+        pedidos.forEach((pedido) => {
+          if (
+            pedidosParaSincronizar
+              .map((pedido) => pedido.id)
+              .includes(pedido.id)
+          ) {
+            pedido.sincronizado = true;
+          }
+        });
+        await this.setPedidos(pedidos);
+      }
+    } catch (err) {
+      console.log(err);
+      throw new Error("Error al enviar pedidos.");
     }
   }
 }

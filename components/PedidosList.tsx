@@ -13,6 +13,7 @@ export default function PedidosList() {
   const { user } = useUser();
   const apiUrl = user?.publicMetadata.apiUrl as string;
   const choferId = user?.publicMetadata.choferId as number;
+  const [errors, setErrors] = useState<string[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
 
@@ -31,15 +32,37 @@ export default function PedidosList() {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    const errors: string[] = [];
     const getPedidosFromApi = async () => {
       const pedidosRepository = new PedidoRepository(apiUrl, choferId);
-      const pedidos = await pedidosRepository.getPedidosFromApi();
-      await pedidosRepository.setPedidos(pedidos);
-      setPedidos(pedidos);
+      try {
+        const pedidos = await pedidosRepository.getPedidosFromApi();
+        await pedidosRepository.setPedidos(pedidos);
+        setPedidos(pedidos);
+      } catch (error: any) {
+        errors.push(error.message);
+      }
+    };
+
+    const uploadPedidosToApi = async () => {
+      const pedidosRepository = new PedidoRepository(apiUrl, choferId);
+      try {
+        await pedidosRepository.uploadPedidosToApi();
+        const pedidos = await pedidosRepository.getPedidos();
+        setPedidos(pedidos);
+      } catch (error: any) {
+        errors.push(error.message);
+      }
+    };
+
+    const syncData = async () => {
+      await getPedidosFromApi();
+      await uploadPedidosToApi();
+      setErrors(errors);
       setRefreshing(false);
     };
 
-    getPedidosFromApi();
+    syncData();
   }, []);
 
   const renderItem = ({ item }: { item: Pedido }) => {

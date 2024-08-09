@@ -69,11 +69,17 @@ export default function PedidosList() {
           flex: 1,
         }}
       >
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => onDeletePedido(item.id)}>
           <Ionicons name="trash-outline" size={24} color="#e74c3c" />
         </TouchableOpacity>
       </View>
     );
+  };
+
+  const onDeletePedido = async (idPedido: number) => {
+    const pedidosRepository = new PedidoRepository(apiUrl, choferId);
+    await pedidosRepository.deletePedido(idPedido);
+    setPedidos(pedidos.filter((pedido) => pedido.id !== idPedido));
   };
 
   return (

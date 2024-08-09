@@ -11,7 +11,7 @@ interface PedidoCardProps {
   direccion: string;
   razonSocial: string;
   isReclamado: boolean;
-  sincronizado: boolean;
+  sincronizado?: boolean;
   codigoCliente: string;
   condicionVenta: string;
   estadoPedido: EstadoPedido;

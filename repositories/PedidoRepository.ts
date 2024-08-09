@@ -28,6 +28,10 @@ export default class PedidoRepository {
     await AsyncStorage.setItem(pedido.id.toString(), JSON.stringify(pedido));
   }
 
+  async deletePedido(id: number): Promise<void> {
+    await AsyncStorage.removeItem(id.toString());
+  }
+
   async getPedidosFromApi(): Promise<Pedido[]> {
     try {
       // TODO: Logica para solo agregar los pedidos nuevos, y respetar los que ya estan en la aplicacion.

@@ -6,6 +6,8 @@ interface Precio {
 }
 interface Cliente {
   id: number;
+  latitud?: number;
+  longitud?: number;
   telefono: string;
   codigoCliente: string;
   razonSocial: string;

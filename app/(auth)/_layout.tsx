@@ -59,6 +59,7 @@ const TabsPage = () => {
         <Tabs.Screen
           name="map"
           options={{
+            href: null,
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="navigate-outline" size={size} color={color} />

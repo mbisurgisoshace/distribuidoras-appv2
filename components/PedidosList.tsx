@@ -17,11 +17,14 @@ import { TouchableOpacity, View, RefreshControl } from "react-native";
 import PedidoCard from "./PedidoCard";
 import { Pedido } from "@/types/Pedido";
 import PedidoRepository from "@/repositories/PedidoRepository";
+import Searchbar from "./Searchbar";
 
 export default function PedidosList() {
   const { user } = useUser();
   const apiUrl = user?.publicMetadata.apiUrl as string;
   const choferId = user?.publicMetadata.choferId as number;
+
+  const [search, setSearch] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const [filter, setFilter] = useState<"todos" | "pendientes">("todos");
@@ -134,11 +137,24 @@ export default function PedidosList() {
   };
 
   const getFilterPedidos = () => {
+    let filteredPedidos = pedidos;
+
     if (filter === "todos") {
-      return pedidos;
+      filteredPedidos = pedidos;
+    } else {
+      filteredPedidos = pedidos.filter(
+        (pedido) => pedido.estado === "Pendiente"
+      );
     }
 
-    return pedidos.filter((pedido) => pedido.estado === "Pendiente");
+    if (!search) {
+      return filteredPedidos;
+    } else {
+      return filteredPedidos.filter((pedido) =>
+        pedido.cliente.razonSocial.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    //return pedidos.filter((pedido) => pedido.estado === "Pendiente");
   };
 
   return (
@@ -155,7 +171,6 @@ export default function PedidosList() {
           paddingHorizontal: 16,
           flexDirection: "row",
           borderColor: "#6c47ff",
-
           justifyContent: "space-between",
         }}
       >
@@ -188,6 +203,11 @@ export default function PedidosList() {
           <RadioLabel style={{ marginLeft: 10 }}>Pendientes</RadioLabel>
         </Radio>
       </RadioGroup>
+      <Searchbar
+        value={search}
+        placeholder="Buscar por razon social..."
+        onChange={(value) => setSearch(value)}
+      />
       <SwipeListView
         data={getFilterPedidos()}
         leftOpenValue={50}

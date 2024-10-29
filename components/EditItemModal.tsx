@@ -35,6 +35,9 @@ export default function EditItemModal({
       const tablasRepository = new TablasRepository(apiUrl);
       const tablaProductos = await tablasRepository.getProductos();
       setProductos(tablaProductos.productos);
+      if (!itemPedido) {
+        setSelectedProducto(tablaProductos.productos[0].id);
+      }
     }
 
     getProductos();
